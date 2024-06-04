@@ -4,8 +4,26 @@ import { ElementType, FC, useEffect, useState } from "react";
 type Props = {
   appId: string;
   config_id: string;
+  onLogin?: (response: AuthResponse) => void;
+  onInit?: (response: AuthResponse) => void;
 };
-const LoginWithFacebook: FC<Props> = ({ appId, config_id }) => {
+
+export type AuthResponse = {
+  status: string;
+  authResponse: {
+    accessToken: string;
+    expiresIn: number;
+    data_access_expiration_time: number;
+    signedRequest: string;
+    userID: string;
+  };
+};
+const LoginWithFacebook: FC<Props> = ({
+  appId,
+  config_id,
+  onLogin,
+  onInit,
+}) => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   const loadScript = () => {
@@ -28,13 +46,15 @@ const LoginWithFacebook: FC<Props> = ({ appId, config_id }) => {
 
       window.FB.getLoginStatus((response: object) => {
         console.log(response);
+        onInit?.(response as AuthResponse);
       });
     };
 
     window.checkLoginState = () => {
       console.log("cheking...");
-      window.FB.getLoginStatus((response: object) => {
+      window.FB.getLoginStatus((response: AuthResponse) => {
         console.log(response);
+        onLogin?.(response);
       });
     };
 
@@ -45,6 +65,7 @@ const LoginWithFacebook: FC<Props> = ({ appId, config_id }) => {
     loadScript();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Box>
       {scriptLoaded ? (

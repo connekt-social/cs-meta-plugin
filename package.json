@@ -15,10 +15,18 @@
   "dependencies": {
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "sequelize": "^6.37.3",
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
+    "@fastify/sensible": "^5.6.0",
+    "@rjsf/core": "^5.18.4",
     "@rjsf/utils": "^5.18.4",
+    "@rjsf/validator-ajv8": "^5.18.4",
+    "@types/node": "^20.14.0",
+    "fastify": "^4.27.0",
+    "fastify-plugin": "^4.5.1",
     "typescript": "^5.4.5"
   }
 }

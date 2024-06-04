@@ -9,7 +9,9 @@ export type Page = {
   };
 };
 export const getPages = async (access_token: string) => {
-  const response = await apiClient.get("/me/accounts", {
+  const response = await apiClient.get<{
+    data: Page[];
+  }>("/me/accounts", {
     params: {
       fields: "instagram_business_account,id,name,access_token",
       access_token,
@@ -32,7 +34,7 @@ export const getInstagramBusinessAccount = async (
   id: string,
   access_token: string
 ) => {
-  const response = await apiClient.get(`/${id}`, {
+  const response = await apiClient.get<InstagramBusinessAccount>(`/${id}`, {
     params: {
       fields:
         "id,ig_id,username,profile_picture_url,followers_count,follows_count,media_count,name",
