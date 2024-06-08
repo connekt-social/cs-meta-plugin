@@ -1,21 +1,13 @@
-import { RJSFSchema, UiSchema } from "@rjsf/utils";
 import { handler } from "./apiHandlers";
 import path from "path";
 import { UserAccessToken } from "./models/UserAccessToken";
+import { ContentType, publishHandler } from "./publish/publishHandler";
+
 const components: (
   | {
       type: "BACKEND";
       function: "CONTENTTYPE";
-      data: {
-        name: string;
-        description: string;
-        code: string;
-        schema: RJSFSchema;
-        uiSchema?: UiSchema;
-        titlePath?: string;
-        captionPath?: string;
-        thumbnailPath?: string;
-      };
+      data: ContentType;
     }
   | {
       type: "BACKEND";
@@ -27,38 +19,31 @@ const components: (
       function: "PLUGIN_SETTINGS_TAB";
       data: { entryPoint: string; componentName: string };
     }
+  | {
+      type: "BACKEND";
+      function: "CONTENT_PUBLISH";
+      handler: (contentItem: any) => Promise<any>;
+    }
 )[] = [
   {
     type: "BACKEND",
     function: "CONTENTTYPE",
     data: {
-      name: "Image",
-      description:
-        "An Image. Can be used in a normal post, a carousel, or a story.",
+      name: "Story",
+      description: "Post to instagram stories",
       code: "IMAGE",
-      schema: {
-        type: "object",
-        properties: {
-          url: { type: "string" },
-          title: { type: "string" },
-          caption: { type: "string" },
-        },
-        required: ["url"],
-      },
-      uiSchema: {
-        url: {
-          "ui:widget": "FileUploadTextField",
-        },
-      },
-      captionPath: "caption",
-      thumbnailPath: "url",
-      titlePath: "title",
+      key: "STORY",
     },
   },
   {
     type: "BACKEND",
     function: "PLUGIN_REST_API",
     handler: handler,
+  },
+  {
+    type: "BACKEND",
+    function: "CONTENT_PUBLISH",
+    handler: publishHandler,
   },
   {
     type: "FRONTEND",
